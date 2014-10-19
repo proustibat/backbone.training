@@ -251,7 +251,11 @@ $(function() {
 			this.$el.html(this.template());
 
 			var musicians = new Musicians();
-			var notificationsView = new NotificationsView({el: '.js-notification', collection: musicians});
+
+			if(this.child)
+				this.child.remove();
+			this.child = new NotificationsView();
+			$('.js-notification').html(this.child.el);
 
 			switch(type) {
 			case 'home': 
@@ -273,14 +277,17 @@ $(function() {
 			"login": "login",
 			"*path": "home"
 		},
+		initialize: function() {
+			this.LayoutView = new LayoutView();
+		},
 		creation: function() {
-			new LayoutView().render('creation');
+			this.LayoutView.render('creation');
 		},
 		login: function() {
-			new LayoutView().render('login');
+			this.LayoutView.render('login');
 		},
 		home: function() {
-			new LayoutView().render('home');
+			this.LayoutView.render('home');
 		}
 	});	
 
