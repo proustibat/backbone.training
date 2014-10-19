@@ -49,6 +49,33 @@ $(function() {
 		}
 	});
 
+	var NotificationsView = Backbone.View.extend({
+		template: Handlebars.compile($("#notification-template").html()),
+		initialize: function() {
+			this.listenTo(this.collection, 'remove', this.renderSuccess);
+			this.listenTo(this.collection, 'error', this.renderError);
+		},
+		renderSuccess: function() {
+			this.render('Everything went fine', 'secondary');
+		},
+		renderError: function() {
+			this.render('Something went wrong', 'alert');
+		},
+		render: _.throttle(function(message, clazz) {
+			var $message = $(this.template(message)).addClass(clazz);
+			this.$el.append($message);
+			$message.on('click .close', function(e) {
+				e.preventDefault();
+				$message.remove();
+			})
+
+			_.delay(function() {
+				$message.fadeOut(300, function() { $message.remove(); });
+			}.bind(this), 1700);
+		}, 2000)
+	});
+
 	var musicians = new Musicians();
 	var musiciansView = new MusiciansView({el: '.js-main', collection: musicians})
+	var notificationsView = new NotificationsView({el: '.js-notification', collection: musicians});
 });
