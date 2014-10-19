@@ -25,29 +25,33 @@
         <p>Here is a collection of famous musicians<br>Every addition is a blessing</p>
       </div>
       <ul class="button-group">
-        <li><a href="#" class="button radius success">Add an artist</a></li>
-        <li><a href="#" class="button radius">Login</a></li>
+        <li><a href="#" class="button radius success js-creation">Add an artist</a></li>
+        <li><a href="#" class="button radius js-login">Login</a></li>
       </ul>
     </div>
   </nav>
 
-  <div class="tools"></div>
-
-  <div class="row">
-    <div class="large-12 columns js-notification"></div>
-  </div>
-
-  <div class="row">
-    <div class="large-12 columns js-main"></div>
-  </div>
-
-  <div class="pagination-centered"></div>
+  <div id="layout-element"></div>
 
   <footer class="row">
     <div class="large-12 columns"><hr/>
       <p>Made with ♥ while listening Wolf People's Steeple album.</p>
     </div>
   </footer>
+
+  <script id="layout-template" type="text/x-handlebars-template">
+    <div class="tools"></div>
+
+    <div class="row">
+      <div class="large-12 columns js-notification"></div>
+    </div>
+
+    <div class="row">
+      <div class="large-12 columns js-main"></div>
+    </div>
+
+    <div class="pagination-centered"></div>
+  </script>
 
   <script id="musician-template" type="text/x-handlebars-template">
     <div class="large-4 small-6 columns">
