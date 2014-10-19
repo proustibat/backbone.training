@@ -1,0 +1,189 @@
+* {
+	font-family: "Open Sans", "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif !important;
+}
+
+.top-bar {
+	background-color: #2D3E50;
+	text-align: center;
+	height: auto;
+	padding: 0.5rem 0.5rem 1.5rem 0.5rem;
+}
+
+.top-bar img, .top-bar h3 {
+	display: inline-block;
+	vertical-align: top;
+}
+
+.top-bar h3, .top-bar p {
+	color: white;
+	line-height: 1.2;
+}
+
+.top-bar h3 {
+	cursor: pointer;
+}
+
+.top-bar p {
+	margin-bottom: 2.5rem;
+}
+
+.top-bar .button {
+	top: 0px;
+}
+
+.top-bar .button-group > li {
+	margin: 0;
+}
+
+.top-bar .button-group > li .button {
+	border: none;
+}
+
+.top-bar .button {
+	width: 12rem;
+}
+
+.button, .button:hover, .button:focus {
+	background-color: #3C546E;
+}
+
+.button.success, .button.success:hover, .button.success:focus {
+	background-color: #1BBC9B;
+}
+
+img.face {
+	display: block;
+	margin: auto;
+}
+
+:not(.nodelete).delete {
+	position: relative;
+	cursor: pointer;
+}
+
+:not(.nodelete).delete:before {
+	position: absolute;
+	display: block;
+	content: " ";
+    width: 180px;
+    height: 180px;
+    border-radius: 90px;
+   	left: calc(50% - 90px);
+	background-color: red;
+   	vertical-align: middle;
+   	opacity: 0.5;
+}
+
+.delete:after {
+	top: 75px;
+	position: absolute;
+	display: block;
+	content: " ";
+    width: 120px;
+    height: 30px;
+   	left: calc(50% - 60px);
+	background-color: white;
+   	vertical-align: middle;
+}
+
+.panel {
+	background: none;
+	border: none;
+}
+
+h6.subheader {
+	height: 11rem; /* if more than 3 el in a row */
+	overflow: hidden;
+}
+
+.sub-nav {
+	padding: 10px 10px 10px 10px;
+	margin-bottom: 0px;
+}
+
+.sub-nav dt, .sub-nav dd {
+	margin-top: 10px;
+}
+
+.sub-nav dd {
+	margin-left: 0.2rem;
+}
+
+.sub-nav dd.active a, .sub-nav dd a {
+	padding: 0.1rem;
+}
+
+.sub-nav dd a {
+	color: #DDD;
+}
+
+.sub-nav dd.active a, .sub-nav dd.active a:hover {
+	color: #333;
+	background: none;
+}
+
+.tools {
+	border-bottom: 1px solid #f2f2f2;
+	margin-bottom: 18px;
+}
+
+.tools input {
+	margin: 0.5rem 0 0.5rem 0;
+	border-radius: 0.2rem;
+}
+
+ul.pagination li.current a {
+	background-color: #3C546E;
+}
+
+footer p {
+	color: #DDD;
+	font-weight: 300;
+}
+
+textarea {
+	resize: none; 
+}
+
+.prefix.textarea, textarea {
+	height: 130px;
+}
+
+input[type=submit] {
+	width: 100%;
+}
+
+img.black-and-white {
+	cursor: pointer;
+
+	-webkit-filter: grayscale(1);
+	-moz-filter: grayscale(1);
+	filter: grayscale(1);
+
+	-webkit-transition: all 300ms;
+	-moz-transition: all 300ms;
+	transition: 300ms;
+}
+
+img.black-and-white:hover, img.black-and-white.selected {
+	-webkit-filter: grayscale(0);
+	-moz-filter: grayscale(0);
+	filter: grayscale(0);
+}
+
+.musician-faces {
+	padding-bottom: 20px;
+}
+
+.alert-box.alert {
+	background-color: #E84C3D;
+	border-color: #E84C3D;
+}
+
+.label {
+	font-size: 16px;
+}
+
+p {
+	text-align: center;
+}
