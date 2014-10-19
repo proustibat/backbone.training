@@ -8,11 +8,31 @@ $(function() {
 		})
 	});
 
-	var MusiciansView = Backbone.View.extend({
+	var MusicianView = Backbone.View.extend({
 		template: Handlebars.compile($("#musician-template").html()),
+		events: {
+			'mouseover': 'showDelete',
+			'mouseleave': 'hideDelete',
+			'click': 'delete'
+		},
+		initialize: function() {
+			this.$el.html(this.template(this.model.toJSON()));
+		},
+		showDelete: function() {
+			this.$('.columns').addClass('delete');
+		},
+		hideDelete: function() {
+			this.$('.columns').removeClass('delete');
+		},
+		delete: function() {
+			this.model.destroy().done(_.bind(this.remove, this));
+		}
+	});
+
+	var MusiciansView = Backbone.View.extend({
 		initialize: function() {
 			this.collection.fetch();
-			this.listenTo(this.collection, 'sync', this.render);
+			this.listenTo(this.collection, 'sync remove', this.render);
 		},
 		render: function() {
 			this.$el.html('');
@@ -24,7 +44,7 @@ $(function() {
 					this.$el.append($row);
 				}
 
-				$row.append(this.template(model.toJSON()));
+				$row.append(new MusicianView({model: model}).el);
 			}, this);
 		}
 	});
