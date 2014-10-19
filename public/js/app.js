@@ -1,6 +1,8 @@
 "use strict";
 
 $(function() {
+	var Pictures = Backbone.Collection.extend({url: '/picture'});
+	
 	var Musicians = Backbone.Collection.extend({
 		url: '/musician',
 		model: Backbone.Model.extend({
@@ -49,9 +51,45 @@ $(function() {
 		}
 	});
 
+	var MusicianFaceView = Backbone.View.extend({
+		template: Handlebars.compile($("#musician-faces-template").html()),
+		initialize: function() {
+			this.$el.html(this.template(this.model.toJSON()));
+		},
+		events: {
+			'click img': 'pick'
+		},
+		pick: function() {
+			this.trigger('selection', this.model);
+			this.$('img').addClass('selected');
+		}
+	});
+
+	var MusiciansFacesView = Backbone.View.extend({
+		initialize: function() {
+			this.collection = new Pictures();
+			this.collection.fetch().done(this.render.bind(this));
+		},
+		render: function() {
+			var $row = $('<div class="row">');
+			this.$el.html($row);
+			this.collection.each(function(model) {
+				var child = new MusicianFaceView({model: model});
+				this.listenTo(child, 'selection', this.selection);
+				$row.append(child.el);
+			}.bind(this));
+		},
+		selection: function(model) {
+			this.$('img').removeClass('selected');
+			var $input = this.$el.closest('form').find('input[name=picture]');
+			$input.val(model.get('picture'));
+		}
+	});
+
 	var MusiciansCreationView = Backbone.View.extend({
 		template: Handlebars.compile($("#musician-creation-template").html()),
 		initialize: function() {
+			this.childView = new MusiciansFacesView();
 			this.render();
 		},
 		events: {
@@ -59,6 +97,7 @@ $(function() {
 		},
 		render: function() {
 			this.$el.append(this.template());
+			this.$('.musician-faces').append(this.childView.el);
 
 			this.listenTo(this.collection, 'add', function() {
 				var $name = this.$('input[name=name]');
