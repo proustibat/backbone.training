@@ -8,5 +8,5 @@ $(function() {
 		}
 	});
 
-	var musicianView = new MusicianView({el: '.js-main'})
+	var musiciansView = new MusiciansView({el: '.js-main'})
 });
