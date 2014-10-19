@@ -1,6 +1,18 @@
 "use strict";
 
 $(function() {
+	var _sync = Backbone.sync;
+	Backbone.sync = function(method, model, options) {
+    	var _error = options.error;
+    	options.error = function(xhr, status, error) {
+    		if(model.handleErrors)
+    			_error(xhr, status, error);
+    		else
+           		Backbone.trigger('notification:failure', xhr.statusText ? xhr.statusText : 'Something went wrong');
+        }
+    	return _sync(method, model, options);
+    };
+
 	var Pictures = Backbone.Collection.extend({url: '/picture'});
 
 	var Musicians = Backbone.Collection.extend({
@@ -24,7 +36,8 @@ $(function() {
 				url += '/signin';
 			}
 			return url;
-		}
+		},
+		handleErrors: true
 	});
 	var user = new User();
 
@@ -45,7 +58,12 @@ $(function() {
 			this.$('.columns').removeClass('delete');
 		},
 		delete: function() {
-			this.model.destroy({wait: true}).done(_.bind(this.remove, this));
+			this.model
+				.destroy({wait: true})
+				.done(function() {
+					Backbone.trigger('notification:success', 'Everything went fine');
+					this.remove();
+				}.bind(this));
 		}
 	});
 
@@ -131,21 +149,23 @@ $(function() {
 			var $name = this.$('input[name=name]');
 			var $bio = this.$('textarea[name=bio]');
 			var $picture = this.$('input[name=picture]');
-			this.collection.create({name: $name.val(), bio: $bio.val(), picture: $picture.val()}, {wait: true, success: function() { this.trigger('create'); }.bind(this.collection)});
+			this.collection.create({name: $name.val(), bio: $bio.val(), picture: $picture.val()}, {wait: true, 
+				success: function() { Backbone.trigger('notification:success', 'Everything went fine'); }
+			});
 		}
 	});
 
 	var NotificationsView = Backbone.View.extend({
 		template: Handlebars.compile($("#notification-template").html()),
 		initialize: function() {
-			this.listenTo(this.collection, 'remove', this.renderSuccess);
-			this.listenTo(this.collection, 'error', this.renderError);
+			this.listenTo(Backbone, 'notification:success', this.renderSuccess);
+			this.listenTo(Backbone, 'notification:failure', this.renderError);
 		},
-		renderSuccess: function() {
-			this.render('Everything went fine', 'secondary');
+		renderSuccess: function(message) {
+			this.render(message, 'secondary');
 		},
-		renderError: function() {
-			this.render('Something went wrong', 'alert');
+		renderError: function(message) {
+			this.render(message, 'alert');
 		},
 		render: _.throttle(function(message, clazz) {
 			var $message = $(this.template(message)).addClass(clazz);
@@ -204,11 +224,16 @@ $(function() {
 		},
 		submit: function(e) {
 			e.preventDefault();
+			this.$('input[type=submit]').removeClass('animated shake');
+
 			var name = this.$('input[name=name]').val();
 			var password = this.$('input[name=password]').val();
 			this.model
 				.save({name: name, password: password, sign: true})
-				.done(this.renderLogged.bind(this));
+				.done(this.renderLogged.bind(this))
+				.fail(function() {
+					this.$('input[type=submit]').addClass('animated shake');
+				}.bind(this));
 		},
 		logout: function(e) {
 			e.preventDefault();
