@@ -8,14 +8,8 @@ $(function() {
 		})
 	});
 
-	var MusicianView = Backbone.View.extend({
-		template: Handlebars.compile($("#musician-template").html()),
-		initialize: function() {
-			this.$el.html(this.template(this.model.toJSON()));
-		}
-	});
-
 	var MusiciansView = Backbone.View.extend({
+		template: Handlebars.compile($("#musician-template").html()),
 		initialize: function() {
 			this.collection.fetch();
 			this.listenTo(this.collection, 'sync', this.render);
@@ -23,9 +17,14 @@ $(function() {
 		render: function() {
 			this.$el.html('');
 			
+			var $row;
 			this.collection.each(function(model, index) {
-				var child = new MusicianView({model: model});
-				this.$el.append(child.el);
+				if(index % 3 === 0) {
+					$row = $('<div class="row">');
+					this.$el.append($row);
+				}
+
+				$row.append(this.template(model.toJSON()));
 			}, this);
 		}
 	});
