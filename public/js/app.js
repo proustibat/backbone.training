@@ -53,13 +53,9 @@ $(function() {
 		template: Handlebars.compile($("#notification-template").html()),
 		initialize: function() {
 			this.listenTo(this.collection, 'remove', this.renderSuccess);
-			this.listenTo(this.collection, 'error', this.renderError);
 		},
 		renderSuccess: function() {
 			this.render('Everything went fine', 'secondary');
-		},
-		renderError: function() {
-			this.render('Something went wrong', 'alert');
 		},
 		render: _.throttle(function(message, clazz) {
 			var $message = $(this.template(message)).addClass(clazz);
