@@ -54,7 +54,7 @@
   </script>
 
   <script id="musician-template" type="text/x-handlebars-template">
-    <div class="large-4 small-6 columns">
+    <div class="large-4 small-6 columns {{#unless picture}}nodelete{{/unless}}">
       <img class="face" src="{{picture}}">
         
       <div class="panel">

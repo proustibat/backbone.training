@@ -49,6 +49,35 @@ $(function() {
 		}
 	});
 
+	var MusiciansCreationView = Backbone.View.extend({
+		template: Handlebars.compile($("#musician-creation-template").html()),
+		initialize: function() {
+			this.render();
+		},
+		events: {
+			'submit': 'submit'
+		},
+		render: function() {
+			this.$el.append(this.template());
+
+			this.listenTo(this.collection, 'add', function() {
+				var $name = this.$('input[name=name]');
+				var $bio = this.$('textarea[name=bio]');
+				var $picture = this.$('input[name=picture]');
+				$name.val('');
+				$bio.val('');
+				$picture.val('');
+			}.bind(this));
+		},
+		submit: function(e) {
+			e.preventDefault();
+			var $name = this.$('input[name=name]');
+			var $bio = this.$('textarea[name=bio]');
+			var $picture = this.$('input[name=picture]');
+			this.collection.create({name: $name.val(), bio: $bio.val(), picture: $picture.val()}, {wait: true, success: function() { this.trigger('create'); }.bind(this.collection)});
+		}
+	});
+
 	var NotificationsView = Backbone.View.extend({
 		template: Handlebars.compile($("#notification-template").html()),
 		initialize: function() {
@@ -111,6 +140,7 @@ $(function() {
 				new MusiciansView({el: '.js-main', collection: musicians});
 			break;
 			case 'creation':
+				new MusiciansCreationView({el: '.js-main', collection: musicians});
 			break;
 			case 'login':
 			break;
