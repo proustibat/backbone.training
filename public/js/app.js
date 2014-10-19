@@ -2,13 +2,31 @@
 
 $(function() {
 	var Pictures = Backbone.Collection.extend({url: '/picture'});
-	
+
 	var Musicians = Backbone.Collection.extend({
 		url: '/musician',
 		model: Backbone.Model.extend({
 			urlRoot: '/musician'
 		})
 	});
+
+	var User = Backbone.Model.extend({
+		initialize: function() {
+			this.on('sync', this.notNewAnymore);
+		},
+		notNewAnymore: function() {
+			this.set('id', 0);
+		},
+		url: function() {
+			var url = '/user';
+			if(this.has('sign')) {
+				this.unset('sign');
+				url += '/signin';
+			}
+			return url;
+		}
+	});
+	var user = new User();
 
 	var MusicianView = Backbone.View.extend({
 		template: Handlebars.compile($("#musician-template").html()),
@@ -165,6 +183,42 @@ $(function() {
 		}
 	});
 
+	var LoginView = Backbone.View.extend({
+		templateLogin: Handlebars.compile($("#login-template").html()),
+		templateLogged: Handlebars.compile($("#logged-template").html()),
+		events: {
+			'submit': 'submit',
+			'click .js-logout': 'logout'
+		},
+		initialize: function() {
+			this.model
+				.fetch()
+				.done(this.renderLogged.bind(this))
+				.fail(this.renderLogin.bind(this));
+		},
+		renderLogged: function() {
+			this.$el.html(this.templateLogged(this.model.toJSON()));
+		},
+		renderLogin: function() {
+			this.$el.html(this.templateLogin());
+		},
+		submit: function(e) {
+			e.preventDefault();
+			var name = this.$('input[name=name]').val();
+			var password = this.$('input[name=password]').val();
+			this.model
+				.save({name: name, password: password, sign: true})
+				.done(this.renderLogged.bind(this));
+		},
+		logout: function(e) {
+			e.preventDefault();
+			this.model
+				.set({sign: true})
+				.destroy()
+				.done(this.renderLogin.bind(this));
+		}
+	});
+
 	var LayoutView = Backbone.View.extend({
 		el: '#layout-element',
 		template: Handlebars.compile($("#layout-template").html()),
@@ -182,6 +236,7 @@ $(function() {
 				new MusiciansCreationView({el: '.js-main', collection: musicians});
 			break;
 			case 'login':
+				new LoginView({el: '.js-main', model: user});
 			break;
 			}
 		}
