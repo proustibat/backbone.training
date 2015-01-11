@@ -178,4 +178,18 @@
     </div>
   </script>
 
+  <script id="musician-filter-template" type="text/x-handlebars-template">
+    <div class="row">
+      <div class="large-12 columns">
+        <dl class="sub-nav">
+          <dt>Filter:</dt>
+          <dd {{#equal . 'All'}}class="active"{{/equal}}><a>All</a></dd>
+          <dd {{#equal . 'Floyd'}}class="active"{{/equal}}><a>Floyd</a></dd>
+          <dd {{#equal . 'Beatles'}}class="active"{{/equal}}><a>Beatles</a></dd>
+          <dd {{#equal . 'Zeppelin'}}class="active"{{/equal}}><a>Zeppelin</a></dd>
+        </dl>
+      </div>
+    </div>
+  </script>
+
 </body>

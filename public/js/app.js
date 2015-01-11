@@ -1,6 +1,10 @@
 "use strict";
 
 $(function() {
+	Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
+		return lvalue != rvalue ? options.inverse(this) : options.fn(this);
+	});
+
 	var _sync = Backbone.sync;
 	Backbone.sync = function(method, model, options) {
     	var _error = options.error;
@@ -17,6 +21,13 @@ $(function() {
 
 	var Musicians = Backbone.Collection.extend({
 		url: '/musician',
+		filterBy: function(criteria) {
+			var filtered = this.filter(function(musician) {
+				return criteria === 'All' || 
+					musician.get('bio').indexOf(criteria) !== -1;
+			});
+			return new Musicians(filtered);
+		},
 		model: Backbone.Model.extend({
 			urlRoot: '/musician',
 			initialize: function() {
@@ -78,13 +89,18 @@ $(function() {
 	});
 
 	var MusiciansView = Backbone.View.extend({
-		initialize: function() {
+		template: Handlebars.compile($("#musician-filter-template").html()),
+		initialize: function(options) {
+			this.criteria = options.criteria || 'All';
 			this.collection.fetch();
-			this.listenTo(this.collection, 'sync remove', this.render);
+			this.listenTo(this.collection, 'sync remove', this.filter);
+		},
+		events: {
+			'click .sub-nav a': 'filter'
 		},
 		render: function() {
-			this.$el.html('');
-			
+			this.$el.html(this.template(this.criteria));
+
 			var $row;
 			this.collection.each(function(model, index) {
 				if(index % 3 === 0) {
@@ -94,6 +110,20 @@ $(function() {
 
 				$row.append(new MusicianView({model: model}).el);
 			}, this);
+		},
+		filter: function(e) {
+			if(e.preventDefault) {
+				e.preventDefault();
+				this.criteria = $(e.currentTarget).html();
+			}
+
+			if(!this.original)
+				this.original = this.collection;
+
+			this.collection = this.original.filterBy(this.criteria);
+			Backbone.history.navigate('?'+this.criteria);
+
+			this.render();
 		}
 	});
 
@@ -264,7 +294,7 @@ $(function() {
 	var LayoutView = Backbone.View.extend({
 		el: '#layout-element',
 		template: Handlebars.compile($("#layout-template").html()),
-		render: function(type) {
+		render: function(type, query) {
 			this.$el.html(this.template());
 
 			var musicians = new Musicians();
@@ -276,7 +306,7 @@ $(function() {
 
 			switch(type) {
 			case 'home': 
-				new MusiciansView({el: '.js-main', collection: musicians});
+				new MusiciansView({el: '.js-main', collection: musicians, criteria: query});
 			break;
 			case 'creation':
 				new MusiciansCreationView({el: '.js-main', collection: musicians});
@@ -303,8 +333,8 @@ $(function() {
 		login: function() {
 			this.LayoutView.render('login');
 		},
-		home: function() {
-			this.LayoutView.render('home');
+		home: function(route, query) {
+			this.LayoutView.render('home', query);
 		}
 	});	
 
