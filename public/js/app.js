@@ -18,7 +18,17 @@ $(function() {
 	var Musicians = Backbone.Collection.extend({
 		url: '/musician',
 		model: Backbone.Model.extend({
-			urlRoot: '/musician'
+			urlRoot: '/musician',
+			initialize: function() {
+				// https://github.com/jashkenas/backbone/issues/3328
+				this.on('invalid', function(model, errors) {
+					if (this.collection)
+						this.collection.trigger('invalid', model, errors);
+				});
+			},
+			validate: function(attrs, options) {
+				return (attrs.name.length < 3) ? ['name'] : undefined;
+			}
 		})
 	});
 
@@ -125,6 +135,20 @@ $(function() {
 	var MusiciansCreationView = Backbone.View.extend({
 		template: Handlebars.compile($("#musician-creation-template").html()),
 		initialize: function() {
+			this.listenTo(this.collection, 'add', function() {
+				var $name = this.$('input[name=name]');
+				var $bio = this.$('textarea[name=bio]');
+				var $picture = this.$('input[name=picture]');
+				$name.val('');
+				$bio.val('');
+				$picture.val('');
+			}.bind(this));
+
+			this.listenTo(this.collection, 'invalid', function(model, errors) {
+				if (_.contains(errors, 'name')) 
+					this.$('input[name=name]').closest('.row').addClass('invalid');
+			});
+
 			this.childView = new MusiciansFacesView();
 			this.render();
 		},
@@ -134,18 +158,11 @@ $(function() {
 		render: function() {
 			this.$el.append(this.template());
 			this.$('.musician-faces').append(this.childView.el);
-
-			this.listenTo(this.collection, 'add', function() {
-				var $name = this.$('input[name=name]');
-				var $bio = this.$('textarea[name=bio]');
-				var $picture = this.$('input[name=picture]');
-				$name.val('');
-				$bio.val('');
-				$picture.val('');
-			}.bind(this));
 		},
 		submit: function(e) {
 			e.preventDefault();
+			this.$('input[name=name]').closest('.row').removeClass('invalid');
+
 			var $name = this.$('input[name=name]');
 			var $bio = this.$('textarea[name=bio]');
 			var $picture = this.$('input[name=picture]');

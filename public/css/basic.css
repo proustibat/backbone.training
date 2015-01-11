@@ -187,3 +187,9 @@ img.black-and-white:hover, img.black-and-white.selected {
 p {
 	text-align: center;
 }
+
+.row.invalid span.prefix, .row.invalid input {
+	color: #F04124;
+	border-color: #F04124;
+	transition: none;
+}
