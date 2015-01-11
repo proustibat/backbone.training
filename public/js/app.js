@@ -334,7 +334,7 @@ $(function() {
 			this.LayoutView.render('login');
 		},
 		home: function(route, query) {
-			query = _.chain(query.split('&')).map(function(params) {
+			query = _.chain(query ? query.split('&') : '').map(function(params) {
     			var p = params.split('=');
     			return [p[0], decodeURIComponent(p[1])];
   			}).object().value();
