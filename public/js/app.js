@@ -121,7 +121,7 @@ $(function() {
 				this.original = this.collection;
 
 			this.collection = this.original.filterBy(this.criteria);
-			Backbone.history.navigate('?'+this.criteria);
+			Backbone.history.navigate('?filter='+this.criteria);
 
 			this.render();
 		}
@@ -306,7 +306,7 @@ $(function() {
 
 			switch(type) {
 			case 'home': 
-				new MusiciansView({el: '.js-main', collection: musicians, criteria: query});
+				new MusiciansView({el: '.js-main', collection: musicians, criteria: query.filter});
 			break;
 			case 'creation':
 				new MusiciansCreationView({el: '.js-main', collection: musicians});
@@ -334,6 +334,11 @@ $(function() {
 			this.LayoutView.render('login');
 		},
 		home: function(route, query) {
+			query = _.chain(query.split('&')).map(function(params) {
+    			var p = params.split('=');
+    			return [p[0], decodeURIComponent(p[1])];
+  			}).object().value();
+
 			this.LayoutView.render('home', query);
 		}
 	});	
