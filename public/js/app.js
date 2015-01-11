@@ -100,6 +100,7 @@ $(function() {
 		},
 		render: function() {
 			this.$el.html(this.template(this.criteria));
+			this.$('dt').tipper({direction: 'top'});
 
 			var $row;
 			this.collection.each(function(model, index) {
