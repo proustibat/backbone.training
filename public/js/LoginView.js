@@ -17,6 +17,10 @@ define(function(require) {
 		},
 		renderLogged: function() {
 			this.$el.html(this.templateLogged(this.model.toJSON()));
+
+			require(['./static/proverbs'], function(proverbs) {
+				this.$('p').append($('<p/>', {text: proverbs.music}));
+			}.bind(this));
 		},
 		renderLogin: function() {
 			this.$el.html(this.templateLogin());
