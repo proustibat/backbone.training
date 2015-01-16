@@ -31,11 +31,11 @@ define(function(require) {
 		it('should refuse to add an invalid model', function(done) {
 			expect(musicians).to.have.length(4);
 
-			musicians.add({name: "Jo", bio: "L'amérique"}, {validate: true});
 			musicians.on('invalid', function() {
 				expect(musicians).to.have.length(4);
 				done();
 			});
+			musicians.add({name: "Jo", bio: "L'amérique"}, {validate: true});
 		});
 	});
 });
