@@ -6,6 +6,10 @@
     ".jshintrc",
     "**/*.txt"
   ],
+  "devDependencies": {
+    "mocha": "x",
+    "chai": "x"
+  },
   "dependencies": {
     "foundation": "~5.4",
     "backbone": "~1.1",
