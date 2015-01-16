@@ -1,0 +1,9 @@
+({
+	"baseUrl":"./js",
+	"mainConfigFile":"js/app.js",
+	"name":"app",
+	"optimize":"uglify2",
+	"generateSourceMaps":true,
+	"preserveLicenseComments":false,
+	"out":"dist/app.js"
+})

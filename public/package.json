@@ -9,7 +9,7 @@
     "grunt-contrib-requirejs": "0.4.x"
   },
   "scripts": {
-      "requirejs": "r.js -o baseUrl=./js mainConfigFile=js/app.js name=app insertRequire=app optimize=uglify2 generateSourceMaps=true preserveLicenseComments=false out=dist/app.js"
+      "requirejs": "r.js -o build.js"
   },
   "engine": "node 0.10.x"
 }
