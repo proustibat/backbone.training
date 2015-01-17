@@ -1,5 +1,4 @@
 define(function(require) {
-	var expect = require('chai').expect;
 	var Musicians = require('./Musicians');
 
 	describe('Musicians', function() {

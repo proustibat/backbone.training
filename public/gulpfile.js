@@ -13,3 +13,10 @@ gulp.task("default", function() {
 	})
 	.pipe(gulp.dest("dist"));
 });
+
+var mocha = require('gulp-mocha-phantomjs');
+gulp.task('test', function () {
+	return gulp
+		.src('test/index.html')
+		.pipe(mocha());
+});

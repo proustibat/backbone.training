@@ -8,7 +8,8 @@
   ],
   "devDependencies": {
     "mocha": "x",
-    "chai": "x"
+    "chai": "x",
+    "sinon": "1.10.x"
   },
   "dependencies": {
     "foundation": "~5.4",
