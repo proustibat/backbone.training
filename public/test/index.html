@@ -6,5 +6,21 @@
  </head>
 <body>
 	<div id="mocha"></div>
+
+	<script src="../bower_components/mocha/mocha.js"></script>
+    <script src="../bower_components/chai/chai.js"></script>
+
+    <script type="text/javascript" charset="utf-8">
+        mocha.setup('bdd');
+        var expect = chai.expect;
+    </script>
+
 	<script src="../bower_components/requirejs/require.js" data-main="./runner"></script>
+
+	<script>
+	require.onError = function (err) {
+    	console.log(err.requireType);
+        throw err;
+  	};
+	</script>
 </body>
