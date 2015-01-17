@@ -5,11 +5,14 @@
   "devDependencies": {
     "gulp": "3.8.x",
     "gulp-requirejs": "0.1.x",
+    "gulp-mocha-phantomjs": "0.5.x",
+    
     "grunt": "0.4.x",
-    "grunt-contrib-requirejs": "0.4.x"
+    "grunt-contrib-requirejs": "0.4.x",
+    "grunt-mocha": "0.4.x"
   },
   "scripts": {
-      "requirejs": "r.js -o build.js"
+    "requirejs": "r.js -o build.js"
   },
   "engine": "node 0.10.x"
 }

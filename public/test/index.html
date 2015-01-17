@@ -19,7 +19,7 @@
 
 	<script>
 	require.onError = function (err) {
-    	console.log(err.requireType);
+    	console.log(err.requireType, err);
         throw err;
   	};
 	</script>
