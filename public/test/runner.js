@@ -26,8 +26,6 @@ Function.prototype.bind = Function.prototype.bind || function (thisp) {
 
 require([
 	'musicians/MusiciansTest.js',
-	'UserTest.js',
-	'LoginViewTest.js',
 ], function() {
 	if (window.mochaPhantomJS)
 		mochaPhantomJS.run();
