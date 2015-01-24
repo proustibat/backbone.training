@@ -15,6 +15,8 @@ define(function(require) {
 			this.render(message, 'alert');
 		},
 		render: _.throttle(function(message, clazz) {
+			if(!message) return;
+
 			var $message = $(this.template(message)).addClass(clazz);
 			this.$el.append($message);
 			$message.on('click .close', function(e) {
