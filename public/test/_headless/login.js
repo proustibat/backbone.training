@@ -28,6 +28,39 @@ describe('Welcome', function(){
 			done();	
 		});
 	});
+
+	it('should login', function(done){
+		expect(browser.url).to.not.contain('#login');
+
+		click('a.js-login');
+		browser.reload(function() {
+			expect(browser.url).to.contain('#login');
+			expect(browser.text()).to.contain('Please, enter your credentials');
+
+			browser
+				.fill('name', 'paul')
+				.fill('password', 'paul')
+				.pressButton('Login', function() {
+					expect(browser.text()).to.contain('Welcome on board');
+					done();
+				});
+		});
+	});
+
+	it('should click on a face', function(done){
+		expect(select('.js-notification .alert-box')).to.have.length(0);
+
+		click('.face:first');
+		browser.wait(selectFirst.bind(null, '.js-notification .alert-box'), 
+		function() {
+			expect(select('.face')).to.have.length(8);
+
+			expect(select('.js-notification .alert-box')).to.have.length(1);
+			expect(browser.text('.js-notification')).to.not.contain('error');
+
+			done();	
+		});
+	});
 });
 
 function select(select) {
