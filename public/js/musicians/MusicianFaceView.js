@@ -1,12 +1,9 @@
 define(function(require) {
-	var Backbone = require('backbone');
+	var Marionette = require('marionette');
 	var Handlebars = require('handlebars'); 
 
-	return Backbone.View.extend({
-		template: Handlebars.compile(require('text!../templates/musician-faces-template.html')),
-		initialize: function() {
-			this.$el.html(this.template(this.model.toJSON()));
-		},
+	return Marionette.ItemView.extend({
+		template: require('text!../templates/musician-faces-template.html'),
 		events: {
 			'click img': 'pick'
 		},

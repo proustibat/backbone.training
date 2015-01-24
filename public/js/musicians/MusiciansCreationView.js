@@ -1,43 +1,41 @@
 define(function(require) {
-	var Backbone = require('backbone');
+	var Marionette = require('marionette');
 	var MusicianFacesView = require('./MusicianFacesView')
 	var Handlebars = require('handlebars'); 
 
-	return Backbone.View.extend({
-		template: Handlebars.compile(require('text!../templates/musician-creation-template.html')),
+	return Marionette.LayoutView.extend({
+		template: require('text!../templates/musician-creation-template.html'),
+		ui: {
+			name: 'input[name=name]',
+			bio: 'textarea[name=bio]',
+			picture: 'input[name=picture]'
+		},
 		initialize: function() {
 			this.listenTo(this.collection, 'add', function() {
-				var $name = this.$('input[name=name]');
-				var $bio = this.$('textarea[name=bio]');
-				var $picture = this.$('input[name=picture]');
-				$name.val('');
-				$bio.val('');
-				$picture.val('');
+				this.ui.name.val('');
+				this.ui.bio.val('');
+				this.ui.picture.val('');
 			}.bind(this));
 
 			this.listenTo(this.collection, 'invalid', function(model, errors) {
 				if (_.contains(errors, 'name')) 
-					this.$('input[name=name]').closest('.row').addClass('invalid');
+					this.ui.name.closest('.row').addClass('invalid');
 			});
-
-			this.childView = new MusicianFacesView();
-			this.render();
 		},
 		events: {
 			'submit': 'submit'
 		},
-		render: function() {
-			this.$el.append(this.template());
-			this.$('.musician-faces').append(this.childView.el);
+		regions: {
+			faces: '.musician-faces'
+		},
+		onRender: function() {
+			this.faces.show(new MusicianFacesView());
 		},
 		submit: function(e) {
 			e.preventDefault();
-			this.$('input[name=name]').closest('.row').removeClass('invalid');
+			this.ui.name.closest('.row').removeClass('invalid');
 
-			var $name = this.$('input[name=name]');
-			var $bio = this.$('textarea[name=bio]');
-			var $picture = this.$('input[name=picture]');
-			this.collection.create({name: $name.val(), bio: $bio.val(), picture: $picture.val()}, {wait: true, 
+			this.collection.create({name: this.ui.name.val(), bio: this.ui.bio.val(), picture: this.ui.picture.val()}, {wait: true, 
 				success: function() { Backbone.trigger('notification:success', 'Everything went fine'); }
 			});
 		}
