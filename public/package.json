@@ -12,6 +12,7 @@
     "grunt-contrib-requirejs": "0.4.x",
     "grunt-mocha": "0.4.x",
     "grunt-mocha-test": "0.12.x",
+    "grunt-contrib-watch": "0.6.x",
 
     "chai": "x",
     "zombie": "2.5.x"

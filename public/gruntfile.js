@@ -25,12 +25,19 @@ module.exports = function(grunt) {
 				options: { reporter: 'spec' },
 				src: ['test/_headless/*.js']
 			}
+		},
+		watch: {
+			scripts: {
+				files: ['js/**/*.js'],
+				tasks: ['test']
+			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-mocha');
 	grunt.loadNpmTasks('grunt-mocha-test');
+	grunt.loadNpmTasks('grunt-contrib-watch');
 
 	grunt.registerTask('default', ['requirejs']);
 	grunt.registerTask('test', ['mocha']);

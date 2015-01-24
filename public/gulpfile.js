@@ -30,3 +30,7 @@ gulp.task('zombie', function() {
 		.pipe(mochaTest())
 		.once('end', process.exit);
 });
+
+gulp.task('watch', function () {
+	gulp.watch('js/**/*.js', ['test']);
+});
