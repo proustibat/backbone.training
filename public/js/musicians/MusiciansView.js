@@ -1,33 +1,30 @@
 define(function(require) {
 	var Backbone = require('backbone');
+	var Marionette = require('marionette');
 	var Handlebars = require('handlebars'); 
 	var tipper = require('tipper'); 
 	
 	var MusicianView = require('./MusicianView')
 
-	return Backbone.View.extend({
-		template: Handlebars.compile(require('text!../templates/musician-filter-template.html')),
+	return Marionette.CompositeView.extend({
+		template: require('text!../templates/musician-filter-template.html'),
+		templateHelpers: function() {
+			return { criteria: this.criteria };
+		},
 		initialize: function(options) {
 			this.criteria = options.criteria || 'All';
 			this.collection.fetch();
-			this.listenTo(this.collection, 'sync remove', this.filter);
 		},
 		events: {
 			'click .sub-nav a': 'filter'
 		},
-		render: function() {
-			this.$el.html(this.template(this.criteria));
+		collectionEvents: {
+			'sync remove': 'filter'
+		},
+		childView: MusicianView,
+		childViewContainer: '.rows',
+		onDomRefresh: function() {
 			this.$('dt').tipper({direction: 'top'});
-
-			var $row;
-			this.collection.each(function(model, index) {
-				if(index % 3 === 0) {
-					$row = $('<div class="row">');
-					this.$el.append($row);
-				}
-
-				$row.append(new MusicianView({model: model}).el);
-			}, this);
 		},
 		filter: function(e) {
 			if(e.preventDefault) {
@@ -44,4 +41,4 @@ define(function(require) {
 			this.render();
 		}
 	});
-	});
+});
