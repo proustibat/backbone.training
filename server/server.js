@@ -3,7 +3,8 @@
 var express = require('express'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
-	authentication = require('./authentication');
+	authentication = require('./authentication'),
+	port = process.env.PORT || 3000;
 
 var app = express();
 app
@@ -14,6 +15,6 @@ app
 	.use(require('./user'))
 	.use(require('./musician'))
 	.use(require('./picture'))
-	.listen(3000);
+	.listen(port);
 
-console.log('server is listening at 3000');
+console.log('server is listening at ' + port);

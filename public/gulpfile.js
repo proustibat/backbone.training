@@ -20,3 +20,13 @@ gulp.task('test', function () {
 		.src('test/index.html')
 		.pipe(mocha());
 });
+
+var mochaTest = require('gulp-mocha');
+gulp.task('zombie', function() {
+	process.env.PORT = 3333;
+	var server = require('../server/server');
+	gulp
+		.src('test/_headless/*.js')
+		.pipe(mochaTest())
+		.once('end', process.exit);
+});

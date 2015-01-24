@@ -6,13 +6,19 @@
     "gulp": "3.8.x",
     "gulp-requirejs": "0.1.x",
     "gulp-mocha-phantomjs": "0.5.x",
+    "gulp-mocha": "2.0.x",
     
     "grunt": "0.4.x",
     "grunt-contrib-requirejs": "0.4.x",
-    "grunt-mocha": "0.4.x"
+    "grunt-mocha": "0.4.x",
+    "grunt-mocha-test": "0.12.x",
+
+    "chai": "x",
+    "zombie": "2.5.x"
   },
   "scripts": {
-    "requirejs": "r.js -o build.js"
+    "requirejs": "r.js -o build.js",
+    "zombie": "mocha -R Spec test/_headless/integration.js"
   },
   "engine": "node 0.10.x"
 }
