@@ -1,5 +1,5 @@
 define(function(require) {
-	var Backbone = require('backbone');
+	var Marionette = require('marionette'); 
 	var Handlebars = require('handlebars'); 
 	
 	var user = require('./User');
@@ -10,28 +10,28 @@ define(function(require) {
 	var MusiciansView = require('./musicians/MusiciansView');
 	var MusiciansCreationView = require('./musicians/MusiciansCreationView');
 
-	return Backbone.View.extend({
+	return Marionette.LayoutView.extend({
 		el: '#layout-element',
-		template: Handlebars.compile(require('text!./templates/layout-template.html')),
-		render: function(type, query) {
-			this.$el.html(this.template());
-
+		template: require('text!./templates/layout-template.html'),
+		regions: {
+			main: '.js-main',
+			notification: '.js-notification'
+		},
+		onRender: function(){
+			this.notification.show(new NotificationsView());
+		},
+		show: function(type, query) {
 			var musicians = new Musicians();
-
-			if(this.child)
-				this.child.remove();
-			this.child = new NotificationsView();
-			$('.js-notification').html(this.child.el);
-
+			
 			switch(type) {
 			case 'home': 
-				new MusiciansView({el: '.js-main', collection: musicians, criteria: query.filter});
+				this.main.show(new MusiciansView({collection: musicians, criteria: query.filter}));
 			break;
 			case 'creation':
-				new MusiciansCreationView({el: '.js-main', collection: musicians});
+				this.main.show(new MusiciansCreationView({collection: musicians}));
 			break;
 			case 'login':
-				new LoginView({el: '.js-main', model: user});
+				this.main.show(new LoginView({model: user}));
 			break;
 			}
 		}

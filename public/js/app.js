@@ -8,13 +8,15 @@ require.config({
         backbone: '../bower_components/backbone/backbone',
         handlebars: '../bower_components/handlebars/handlebars',
         text: '../bower_components/requirejs-text/text',
-        tipper: '../bower_components/Tipper/jquery.fs.tipper'
+        tipper: '../bower_components/Tipper/jquery.fs.tipper',
+        marionette: '../bower_components/marionette/lib/backbone.marionette'
     },
     shim: {
         backbone: { deps: ['jquery', 'underscore'], exports: 'Backbone' },
         underscore: { exports: '_' },
         handlebars: { exports: 'Handlebars'},
-        tipper: { deps: ['jquery'] }
+        tipper: { deps: ['jquery'] },
+        marionette: { deps: ["backbone"], exports:"Marionette" }
     }
 });
 

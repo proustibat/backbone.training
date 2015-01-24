@@ -1,5 +1,6 @@
 define(function(require) {
 	var Backbone = require('backbone');
+	var Marionette = require('marionette');
 	var LayoutView = require('./LayoutView');
 
 	return Backbone.Router.extend({
@@ -12,10 +13,10 @@ define(function(require) {
 			this.LayoutView = new LayoutView();
 		},
 		creation: function() {
-			this.LayoutView.render('creation');
+			this.LayoutView.render().show('creation');
 		},
 		login: function() {
-			this.LayoutView.render('login');
+			this.LayoutView.render().show('login');
 		},
 		home: function(route, query) {
 			query = _.chain(query ? query.split('&') : '').map(function(params) {
@@ -23,7 +24,7 @@ define(function(require) {
     			return [p[0], decodeURIComponent(p[1])];
   			}).object().value();
 
-			this.LayoutView.render('home', query);
+			this.LayoutView.render().show('home', query);
 		}
 	});	
 });

@@ -1,6 +1,7 @@
 define(function(require) {
 	var Handlebars = require('handlebars'); 
 	var Backbone = require('backbone'); 
+	var Marionette = require('marionette'); 
 
 	Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
 		return lvalue != rvalue ? options.inverse(this) : options.fn(this);
@@ -17,4 +18,10 @@ define(function(require) {
         }
     	return _sync(method, model, options);
     };
+
+	Marionette.Renderer.render = function(require, data){
+		var template = Handlebars.compile(require)
+		return template(data);
+	};
+
 });

@@ -20,6 +20,7 @@
     "animate.css": "~3.2.0",
     "Tipper": "3.1.0",
     "requirejs": "~2.1.x",
-    "requirejs-text":"~2.0.x"
+    "requirejs-text":"~2.0.x",
+    "marionette": "~2.3.0"
   }
 }
