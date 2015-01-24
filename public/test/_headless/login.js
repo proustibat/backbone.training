@@ -16,6 +16,18 @@ describe('Welcome', function(){
 	it('should display 9 faces', function(){
 		expect(select('.face')).to.have.length(9);
 	});
+
+	it('should click on a face', function(done){
+		expect(select('.js-notification .alert-box')).to.have.length(0);
+
+		click('.face:first');
+		browser.wait(selectFirst.bind(null, '.js-notification .alert-box'), 
+		function() {
+			expect(select('.js-notification .alert-box')).to.have.length(1);
+			expect(browser.text('.js-notification')).to.contain('error');
+			done();	
+		});
+	});
 });
 
 function select(select) {
@@ -24,4 +36,8 @@ function select(select) {
 
 function selectFirst(select) {
 	return browser.querySelector(select);	
+}
+
+function click(select) {
+	return browser.window.$(select).click();
 }
