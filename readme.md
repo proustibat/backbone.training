@@ -129,3 +129,37 @@
 * write a test that creates a `LoginView`
 * stub the `user.fetch` to failed and verifies that the generated html contains `Please, enter your credentials`
 * stub the `user.fetch` to succeed and verifies that the generated html contains `Welcome`
+
+### step 22: black-box test home
+* write a test that connects to localhost and verifies that 9 `.face` are there (use zombie, casper, nightmare or another integration test library)
+* use gulp or grunt or npm to launch a server on another port each time the integration test are run (tips: use `process.env.PORT` on the server and on the integration test to switch port)
+
+### step 23: black-box test not authorized
+* write a test that clicks on a musician but fails to delete it because the user is not authenticated
+* verify that a failure message is displayed 
+
+### step 24: black-box test login
+* write a test that login the user, tries to delete a musician and succeed
+* verify that a success message is displayed
+
+### step 25: watch and test
+* use gulp or grunt or npm to watch the project js files and launch unit tests on change
+
+### step 26: enter marionette
+* add marionette to bower and requirejs shim
+* replace the `LayoutView` with a `Marionette.LayoutView``
+* fix the `Router` calls to `LayoutView` accordingly
+
+### step 27: notifications blink
+* find why `NotificationView` acts strangely and fix it
+
+### step 28: musician creation view review
+* change `MusicianCreationView` into a `LayoutView`
+* change `MusicianFacesView` into a `CollectionView`
+* change `MusicianFaceView` into an `ItemView`
+* the `selected` event should continue to work
+
+### step 29: musician view review
+* change `MusiciansView` into a `CollectionView`
+* change `MusicianView` into an `ItemView`
+* the `tooltip` should continue to work
