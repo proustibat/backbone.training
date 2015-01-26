@@ -163,3 +163,12 @@
 * change `MusiciansView` into a `CollectionView`
 * change `MusicianView` into an `ItemView`
 * the `tooltip` should continue to work
+
+### steps 30+: try to resolve one/several of those mysteries
+* How to turn static content into editable content (back and forth)? e.g. make a musician item editable (`name` & `bio` with inputs
+* How to add an item to a collection without knowing the collection validation rules? e.g. create a top 3 at the right of the musician collection, clicking on a musician adds it to the top 3, clicking again removes it; only 3 musicians of a different band can be added at the same time (the top 3 view should handle this validation logic)
+* How to display a view on every page that changes only for some URL? e.g. handle a different big header only on the login screen (the buttons are hidden for example)
+* How to handle a multistep form? e.g. update the musician creation to be a 2 steps form
+* How to handle a infinity scroll? e.g. paginate the musicians 5 by 5 and scroll bottom to unveil the others
+* How to hide some View on some screen resolutions? e.g. hide musicians filter on smaller screens
+* How to synchronise a user in realtime? e.g. add a `reputation` attribute to the user resource, and, server side, make it change on a random basis, the client-side should be updated in realtime without fetching the server
