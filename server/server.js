@@ -9,7 +9,7 @@ var app = express();
 app
 	.use(express.static(__dirname + '/../public'))
 	.use(bodyParser.json({limit: '70mb'}))
-	.use(session({secret: '1337', saveUninitialized: true, resave: true}))
+	.use(session({secret: '1337', saveUninitialized: false, resave: true}))
 	// .use(authentication)
 	.use(require('./user'))
 	.use(require('./musician'))
