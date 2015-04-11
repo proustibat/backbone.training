@@ -18,6 +18,15 @@ router.post('/musician', function(req, res) {
 	}, 1000);
 });
 
+router.put('/musician/:id', function(req, res) {
+	var musician = _.findWhere(musicians, {id: parseInt(req.params.id)});
+	if(!musician)
+		return res.status(404).send({error: 'No item found'});
+
+	_.extend(musician, _.pick(req.body, 'name', 'bio', 'picture'));
+	res.send(musician);
+});
+
 router.delete('/musician/:id', function(req, res) {
 	var musician = _.findWhere(musicians, {id: parseInt(req.params.id)});
 	if(!musician)
