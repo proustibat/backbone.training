@@ -5,7 +5,8 @@
     "express": "4.9.x",
     "express-session": "1.8.x",
     "body-parser": "1.5.x",
-    "lodash": "2.4.x"
+    "lodash": "2.4.x",
+    "socket.io": "1.2.x"
   },
   "engine": "node 0.10.x"
 }
