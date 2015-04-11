@@ -9,14 +9,16 @@ require.config({
         handlebars: '../bower_components/handlebars/handlebars',
         text: '../bower_components/requirejs-text/text',
         tipper: '../bower_components/Tipper/jquery.fs.tipper',
-        marionette: '../bower_components/marionette/lib/backbone.marionette'
+        marionette: '../bower_components/marionette/lib/backbone.marionette',
+        radio: '../bower_components/backbone.radio/build/backbone.radio'
     },
     shim: {
         backbone: { deps: ['jquery', 'underscore'], exports: 'Backbone' },
         underscore: { exports: '_' },
         handlebars: { exports: 'Handlebars'},
         tipper: { deps: ['jquery'] },
-        marionette: { deps: ["backbone"], exports:"Marionette" }
+        marionette: { deps: ["backbone"], exports:"Marionette" },
+        radio: { deps: ["backbone"], exports:"Radio" }
     }
 });
 

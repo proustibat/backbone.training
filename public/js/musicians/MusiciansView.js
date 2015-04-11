@@ -1,9 +1,10 @@
 define(function(require) {
 	var Backbone = require('backbone');
 	var Marionette = require('marionette');
-	var Handlebars = require('handlebars'); 
-	var tipper = require('tipper'); 
-	
+	var Handlebars = require('handlebars');
+	var tipper = require('tipper');
+	var Radio = require('radio');
+
 	var MusicianView = require('./MusicianView')
 
 	return Marionette.CompositeView.extend({
@@ -12,6 +13,8 @@ define(function(require) {
 			return { criteria: this.criteria };
 		},
 		initialize: function(options) {
+			Radio.channel('musician').reply('delete', this.grantDeletion.bind(this));
+
 			this.criteria = options.criteria || 'All';
 			this.collection.fetch();
 		},
@@ -39,6 +42,25 @@ define(function(require) {
 			Backbone.history.navigate('?filter='+this.criteria);
 
 			this.render();
+		},
+		grantDeletion: function(model) {
+			var famous = ['Floyd', 'Beatles', 'Zeppelin'];
+			var band = _.find(famous, function(item) {
+				return model.get('bio').indexOf(item) !== -1;
+			});
+
+			if (band) {
+				var count = this.collection.filter(function(item) {
+					return item.get('bio').indexOf(band) !== -1;
+				}).length;
+
+				if (count === 1) {
+					Backbone.trigger('notification:failure', 'Something went wrong');
+					return false;
+				}
+			}
+
+			return true;
 		}
 	});
 });

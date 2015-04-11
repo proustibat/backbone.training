@@ -2,6 +2,7 @@ define(function(require) {
 	var Backbone = require('backbone');
 	var Marionette = require('marionette');
 	var Handlebars = require('handlebars');
+	var Radio = require('radio');
 
 	return Marionette.ItemView.extend({
 		template: require('text!../templates/musician-template.html'),
@@ -19,11 +20,13 @@ define(function(require) {
 			this.$('.js-face').removeClass('delete');
 		},
 		delete: function() {
-			this.model
-				.destroy({wait: true})
-				.done(function() {
-					Backbone.trigger('notification:success', 'Everything went fine');
-				}.bind(this));
+			var isGranted = Radio.channel('musician').request('delete', this.model);
+			if(isGranted)
+				this.model
+					.destroy({wait: true})
+					.done(function() {
+						Backbone.trigger('notification:success', 'Everything went fine');
+					}.bind(this));
 		},
 		edit: function(e) {
 			e.preventDefault();

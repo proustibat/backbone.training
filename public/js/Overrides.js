@@ -1,7 +1,8 @@
 define(function(require) {
-	var Handlebars = require('handlebars'); 
-	var Backbone = require('backbone'); 
-	var Marionette = require('marionette'); 
+	var Handlebars = require('handlebars');
+	var Backbone = require('backbone');
+	var Marionette = require('marionette');
+	var Radio = require('radio');
 
 	Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
 		return lvalue != rvalue ? options.inverse(this) : options.fn(this);
@@ -24,4 +25,8 @@ define(function(require) {
 		return template(data);
 	};
 
+	Marionette.Application.prototype._initChannel = function () {
+		this.channelName = _.result(this, 'channelName') || 'global';
+		this.channel = _.result(this, 'channel') || Radio.channel(this.channelName);
+	}
 });
