@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function(req, res, next) {
-	if(req.method === 'GET' && req.path !== '/user')
+	if((req.method === 'GET' && req.path !== '/user')
 		|| (req.method === 'POST' && req.path === '/user/signin'))
 		return next();
 
