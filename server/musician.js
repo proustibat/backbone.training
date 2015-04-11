@@ -39,4 +39,29 @@ router.delete('/musician/:id', function(req, res) {
 	return res.send({});
 });
 
+var sockets = [];
+
+setInterval(function() {
+	var index = _.random(0, musicians.length-1),
+		musician = musicians[index];
+
+	musician.fame ? musician.fame++ : musician.fame = 1;
+
+	sockets.forEach(function(socket) {
+		socket.emit('musician', musician);
+	});
+}, 300);
+
+var io = require('./socket').io;
+io.on('connection', function(socket) {
+	sockets.push(socket);
+	socket.on('fame', function(id) {
+		var musician = _.findWhere(musicians, {id: id});
+		if(musician) {
+			musician.fame ? musician.fame++ : musician.fame = 1;
+			this.emit('musician', musician);
+		}
+	});
+});
+
 module.exports = router;

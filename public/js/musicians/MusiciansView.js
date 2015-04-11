@@ -4,6 +4,7 @@ define(function(require) {
 	var Handlebars = require('handlebars');
 	var tipper = require('tipper');
 	var Radio = require('radio');
+	var socket = require('../Socket');
 
 	var MusicianView = require('./MusicianView')
 
@@ -14,6 +15,12 @@ define(function(require) {
 		},
 		initialize: function(options) {
 			Radio.channel('musician').reply('delete', this.grantDeletion.bind(this));
+
+			socket.on('musician', function (musician) {
+				var model = this.collection.findWhere({id: musician.id});
+				if(model)
+					model.set(musician);
+			}.bind(this));
 
 			this.criteria = options.criteria || 'All';
 			this.collection.fetch();

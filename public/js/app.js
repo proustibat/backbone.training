@@ -10,7 +10,8 @@ require.config({
         text: '../bower_components/requirejs-text/text',
         tipper: '../bower_components/Tipper/jquery.fs.tipper',
         marionette: '../bower_components/marionette/lib/backbone.marionette',
-        radio: '../bower_components/backbone.radio/build/backbone.radio'
+        radio: '../bower_components/backbone.radio/build/backbone.radio',
+        io: '../bower_components/socket.io-client/socket.io'
     },
     shim: {
         backbone: { deps: ['jquery', 'underscore'], exports: 'Backbone' },

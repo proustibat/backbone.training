@@ -91,6 +91,10 @@ img.face {
 	border: none;
 }
 
+.panel .label {
+	cursor: pointer;
+}
+
 h6.subheader {
 	height: 11rem; /* if more than 3 el in a row */
 	overflow: hidden;
