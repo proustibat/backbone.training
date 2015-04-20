@@ -10,8 +10,8 @@ var MusiciansViews = Backbone.View.extend({
         this.template = Handlebars.compile($("#musicians-list-template").html());
 
         // 1. Ecouteurs
-        // this.listenTo(this.collection, 'sync', this.render);
-        // this.collection.fetch();
+        this.listenTo(this.collection, 'sync', this.render);
+        this.collection.fetch();
 
         // 2. Sauvegarde le contexte
         // var self = this;
@@ -23,7 +23,17 @@ var MusiciansViews = Backbone.View.extend({
         // this.collection.fetch().done(this.render.bind(this));
 
         // 4. bind contexte via underscore
-        this.collection.fetch().done(_.bind(this.render,this));
+        // this.collection.fetch().done(_.bind(this.render,this));
+
+        // 5. utilisation des paramètres
+        // this.collection.fetch({
+        //     success:function() {
+        //         this.render();
+        //     }.bind(this),
+        //     error: function() {
+
+        //     }.bind(this)
+        // });
     },
 
     render: function() {
