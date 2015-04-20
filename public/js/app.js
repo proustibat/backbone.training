@@ -27,9 +27,6 @@ var MusiciansViews = Backbone.View.extend({
         console.log(this.collection.models[$(e.currentTarget).index()]);
         this.collection.remove(this.collection.models[$(e.currentTarget).index()]);
     },
-    onModelRemoved: function() {
-        console.log('onmodelRemove');
-    },
 
     render: function() {
         console.log('MusiciansViews.render');
@@ -53,7 +50,6 @@ $(document).ready(function() {
 
     var musicianCollection = new MusicianCollection();
 
-//
     var musicianViews = new MusiciansViews({
         el: ".js-musicians-list",
         collection: musicianCollection
