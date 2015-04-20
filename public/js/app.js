@@ -17,6 +17,7 @@ var MusiciansViews = Backbone.View.extend({
 
         // écoute les suppressions sur les models
         this.listenTo(this.collection, 'remove', this.render);
+
     },
     onHoverHandler: function(e) {
         $(e.currentTarget).toggleClass('delete');
@@ -50,7 +51,7 @@ $(document).ready(function() {
 
     var musicianCollection = new MusicianCollection();
 
-    var musicianViews = new MusiciansViews({
+    var musiciansViews = new MusiciansViews({
         el: ".js-musicians-list",
         collection: musicianCollection
     });
