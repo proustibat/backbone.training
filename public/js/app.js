@@ -31,9 +31,7 @@ var MusicianView = Backbone.View.extend({
     initialize: function() {
         console.log('MusicianView.initialize');
         this.template = Handlebars.compile($("#musicians-list-template").html());
-        console.log('this.model : ', this.model.toJSON());
-        var html = this.template(this.model.toJSON());
-        this.$el.html(html);
+        this.render();
     },
     onHoverHandler: function(e) {
         console.log('toggle');
@@ -41,7 +39,6 @@ var MusicianView = Backbone.View.extend({
     },
 
     onClickHandler: function(e) {
-        console.log('onClickHandler');
         this.model.destroy({
                 success: function(model, response) {
                 console.log("DESTROYED");
@@ -51,6 +48,9 @@ var MusicianView = Backbone.View.extend({
     },
     render: function() {
         console.log('MusicianView.render');
+        console.log('this.model : ', this.model.toJSON());
+        var html = this.template(this.model.toJSON());
+        this.$el.html(html);
     }
 });
 
@@ -63,6 +63,7 @@ var MusicianCollection = Backbone.Collection.extend({
 
     }
 });
+
 
 
 $(document).ready(function() {
