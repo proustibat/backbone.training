@@ -1,6 +1,27 @@
 "use strict";
 
 var MusiciansViews = Backbone.View.extend({
+    className: 'row',
+    initialize: function() {
+        console.log('MusiciansViews.initialize');
+        // écoute et lit la collection
+        this.listenTo(this.collection, 'sync destroy', this.render);
+        this.collection.fetch();
+    },
+
+    render: function() {
+        console.log('MusiciansViews.render');
+        var $template = "";
+        this.$el.html("");
+        this.collection.each(function(model) {
+            var child = new MusicianView({ model: model });
+            this.$el.append(child.el);
+        }.bind(this));
+    }
+});
+
+var MusicianView = Backbone.View.extend({
+
     events: {
         "mouseenter .columns": "onHoverHandler",
         "mouseleave .columns": "onHoverHandler",
@@ -8,31 +29,28 @@ var MusiciansViews = Backbone.View.extend({
     },
 
     initialize: function() {
-        console.log('MusiciansViews.initialize');
+        console.log('MusicianView.initialize');
         this.template = Handlebars.compile($("#musicians-list-template").html());
-
-        // écoute et lit la collection
-        this.listenTo(this.collection, 'sync', this.render);
-        this.collection.fetch();
-
-        // écoute les suppressions sur les models
-        this.listenTo(this.collection, 'remove', this.render);
-
+        console.log('this.model : ', this.model.toJSON());
+        var html = this.template(this.model.toJSON());
+        this.$el.html(html);
     },
     onHoverHandler: function(e) {
-        $(e.currentTarget).toggleClass('delete');
+        console.log('toggle');
+        this.$(".columns").toggleClass('delete');
     },
 
     onClickHandler: function(e) {
         console.log('onClickHandler');
-        console.log(this.collection.models[$(e.currentTarget).index()]);
-        this.collection.remove(this.collection.models[$(e.currentTarget).index()]);
+        this.model.destroy({
+                success: function(model, response) {
+                console.log("DESTROYED");
+                console.log('this : ', this);
+            }.bind(this)
+        });
     },
-
     render: function() {
-        console.log('MusiciansViews.render');
-        // rendu de la vue : avec fonction template qui prend données json
-        this.$el.html(this.template(this.collection.toJSON()));
+        console.log('MusicianView.render');
     }
 });
 
