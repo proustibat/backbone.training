@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,10 @@
 <link rel="stylesheet" href="./bower_components/foundation/css/foundation.css">
 <link rel="stylesheet" href="./css/basic.css">
 
+<script src="./bower_components/jquery/dist/jquery.min.js"></script>
+<script src="./bower_components/underscore/underscore-min.js"></script>
+<script src="./bower_components/backbone/backbone.js"></script>
+<script src="./bower_components/handlebars/handlebars.min.js"></script>
 <script src="./js/app.js"></script>
 
 </head>
@@ -30,90 +35,8 @@
 
   <div class="row">
     <div class="large-12 columns">
-      <div class="row">
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/john-lennon.png">
-
-          <div class="panel">
-            <h5>John Lennon</h5>
-            <h6 class="subheader">John Ono Lennon was an English musician, singer and songwriter who rose to worldwide fame as a founder member of the rock band the Beatles, the most commercially successful band in the history of popular music.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/paul-mccartney.png">
-
-          <div class="panel">
-            <h5>Paul McCartney</h5>
-            <h6 class="subheader">Sir James Paul McCartney is an English musician, singer, songwriter, multi-instrumentalist, and composer. With John Lennon, George Harrison and Ringo Starr, he gained worldwide fame as a member of the Beatles.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/jim-morrisson.png">
-
-          <div class="panel">
-            <h5>Jim Morrisson</h5>
-            <h6 class="subheader">James Douglas "Jim" Morrison was an American singer-songwriter and poet, the lead singer of Los Angeles rock band The Doors and one of the 1960's most famous stars in pop/rock music.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/robert-plant.png">
-
-          <div class="panel">
-            <h5>Robert Plant</h5>
-            <h6 class="subheader">Robert Anthony Plant is an English musician, singer and songwriter. Best known as the lead vocalist and lyricist of the rock band Led Zeppelin, he has also had a successful solo career.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/jimmy-page.png">
-
-          <div class="panel">
-            <h5>Jimmy Page</h5>
-            <h6 class="subheader">James Patrick "Jimmy" Page is an English musician, songwriter and record producer who achieved international success as the guitarist and leader of the rock band Led Zeppelin.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/jimi-hendrix.png">
-
-          <div class="panel">
-            <h5>Jimi Hendrix</h5>
-            <h6 class="subheader">James Marshall "Jimi" Hendrix was an American musician, singer, and songwriter. Although his mainstream career spanned only four years, he is widely regarded as one of the most influential electric guitarists in the history of popular music.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/ozzy-osbourne.png">
-
-          <div class="panel">
-            <h5>Ozzy Osbourne</h5>
-            <h6 class="subheader">John Michael "Ozzy" Osbourne is an English heavy metal vocalist, songwriter, and television personality. Osbourne rose to prominence in the early 1970s as the lead vocalist of the pioneering band Black Sabbath.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/syd-barrett.png">
-
-          <div class="panel">
-            <h5>Syd Barrett</h5>
-            <h6 class="subheader">Roger Keith "Syd" Barrett was an English musician, composer, singer, songwriter and painter. He was a founder member of the band Pink Floyd, and was the lead vocalist, guitarist and principal songwriter.</h6>
-          </div>
-        </div>
-
-        <div class="large-4 small-6 columns">
-          <img class="face" src="./css/roger-waters.png">
-
-          <div class="panel">
-            <h5>Roger Waters</h5>
-            <h6 class="subheader">George Roger Waters is an English musician, singer, songwriter and composer. In 1965, he co-founded the progressive rock band Pink Floyd.</h6>
-          </div>
-        </div>
-      </div>
-
+            <div class="row js-musicians-list">
+            </div>
     </div>
   </div>
 
@@ -134,10 +57,10 @@
     </div>
 
     <form>
-      
+
       <input type="hidden" name="picture">
       <div class="musician-faces"></div>
-      
+
       <div class="row">
         <div class="large-4 large-offset-4 columns">
           <div class="row collapse prefix-radius">
@@ -238,4 +161,17 @@
     </div>
   </script>
 
+
+  <script id="musicians-list-template" type="text/x-handlebars-template">
+      {{#each .}}
+        <div class="large-4 small-6 columns">
+          <img class="face" src="{{picture}}">
+          <div class="panel">
+            <h5>{{name}}</h5>
+            <h6 class="subheader">{{bio}}</h6>
+          </div>
+        </div>
+      {{/each}}
+  </script
 </body>
+</html>
