@@ -2,43 +2,38 @@
 
 var MusiciansViews = Backbone.View.extend({
     events: {
-
+        "mouseenter .columns": "onHoverHandler",
+        "mouseleave .columns": "onHoverHandler",
+        "click .columns": "onClickHandler"
     },
+
     initialize: function() {
         console.log('MusiciansViews.initialize');
-        // this.template = $("#musicians-list-template").html();
         this.template = Handlebars.compile($("#musicians-list-template").html());
 
-        // 1. Ecouteurs
+        // écoute et lit la collection
         this.listenTo(this.collection, 'sync', this.render);
         this.collection.fetch();
 
-        // 2. Sauvegarde le contexte
-        // var self = this;
-        // this.collection.fetch().done(function(){
-        //     self.render();
-        // });
+        // écoute les suppressions sur les models
+        this.listenTo(this.collection, 'remove', this.render);
+    },
+    onHoverHandler: function(e) {
+        $(e.currentTarget).toggleClass('delete');
+    },
 
-        // 3. bind contexte (incompatible anciens navigateurs)
-        // this.collection.fetch().done(this.render.bind(this));
-
-        // 4. bind contexte via underscore
-        // this.collection.fetch().done(_.bind(this.render,this));
-
-        // 5. utilisation des paramètres
-        // this.collection.fetch({
-        //     success:function() {
-        //         this.render();
-        //     }.bind(this),
-        //     error: function() {
-
-        //     }.bind(this)
-        // });
+    onClickHandler: function(e) {
+        console.log('onClickHandler');
+        console.log(this.collection.models[$(e.currentTarget).index()]);
+        this.collection.remove(this.collection.models[$(e.currentTarget).index()]);
+    },
+    onModelRemoved: function() {
+        console.log('onmodelRemove');
     },
 
     render: function() {
         console.log('MusiciansViews.render');
-        // console.log('collection data : ', this.collection.toJSON());
+        // rendu de la vue : avec fonction template qui prend données json
         this.$el.html(this.template(this.collection.toJSON()));
     }
 });
