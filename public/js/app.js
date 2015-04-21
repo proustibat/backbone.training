@@ -14,7 +14,9 @@ var MusiciansViews = Backbone.View.extend({
         var $template = "";
         this.$el.html("");
         this.collection.each(function(model) {
-            var child = new MusicianView({ model: model });
+            var child = new MusicianView({
+                model: model
+            });
             this.$el.append(child.el);
         }.bind(this));
     }
@@ -39,8 +41,8 @@ var MusicianView = Backbone.View.extend({
 
     onClickHandler: function(e) {
         this.model.destroy({
-                wait: true, // envoie le succès qu'après confirmation par le serveur
-                success: function(model, response) {
+            wait: true, // envoie le succès qu'après confirmation par le serveur
+            success: function(model, response) {
                 console.log("mode destroyed");
             }.bind(this)
         });
@@ -74,7 +76,7 @@ var NotificationView = Backbone.View.extend({
         var message = "It's ok",
             clazz = 'secondary';
 
-        if(state==="failure") {
+        if (state === "failure") {
             message = "Problem ";
             clazz = "alert ";
         }
@@ -113,31 +115,147 @@ var LayoutView = Backbone.View.extend({
             collection: musicianCollection
         });
 
-        switch(pageType) {
+        switch (pageType) {
             case 'home':
-            console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHH');
                 var musiciansViews = new MusiciansViews({
-                    el: ".js-musicians-list",
                     collection: musicianCollection
                 });
+                this.$(".js-main-page").html(musiciansViews.el);
                 break;
             case 'add':
-                console.log('ADDDDDDDDDDDDDDDDDDDDDDDD');
+                var musiciansCreationView = new MusiciansCreationView({
+                    collection: musicianCollection
+                });
+                this.$(".js-main-page").html(musiciansCreationView.el);
                 break;
             case 'login':
+                var loginView = new LoginView({
+                    collection: musicianCollection
+                });
+                this.$(".js-main-page").html(loginView.el);
                 break;
-            }
         }
+    }
 });
 
 
-var MusicianCollection = Backbone.Collection.extend({
-    url: "/musician",
+var MusiciansCreationView = Backbone.View.extend({
+    pictureView: null,
+    events: {
+        "submit": "submit"
+    },
     initialize: function() {
-        console.log('MusicianCollection.initialize');
+        this.template = Handlebars.compile($("#musician-creation-template").html());
+        this.render();
+        var picturesCollection = new PicturesCollection();
+        this.pictureView = new PicturesView({
+            // el: ".js-musician-faces",
+            collection: picturesCollection
+        });
+        // attache le contenu dans le noeud parce que la vue parente n'est pas encore rendue
+        this.$(".js-musician-faces").html(this.pictureView.el);
+    },
+    submit: function(e) {
+        e.preventDefault();
+        console.log('SUBMIT');
+        var $name = this.$("input[name=name]");
+        var $bio = this.$("textarea[name=bio]");
+        var $picture = this.$("input[name=picture]");
+        this.collection.create({
+            name: $name.val(),
+            bio: $bio.val(),
+            picture: $picture.val()
+        }, {
+            wait: true,
+            success: function() {
+                console.log('SUCCESS CREATE');
+                $name.val('');
+                $bio.val('');
+                $picture.val('');
+                // this.render();
+            }.bind(this),
+            error: function() {
+                console.log('ERROR CREATE');
+            }
+        });
     },
     render: function() {
+        this.$el.html(this.template());
+    }
+});
 
+var LoginView = Backbone.View.extend({
+
+    initialize: function() {
+        this.template = Handlebars.compile($("#login-template").html());
+        this.render();
+    },
+    render: function() {
+        this.$el.html(this.template());
+    }
+});
+
+var PicturesView = Backbone.View.extend({
+    initialize: function() {
+        // this.template = Handlebars.compile($("#musician-faces-template").html());
+        this.listenTo(this.collection, 'sync', this.render);
+        console.log('PICTURESVIEW INIT');
+        this.collection.fetch();
+        this.render();
+    },
+    render: function() {
+        console.log('PICTURESVIEW RENDER : ');
+
+        var $template = "";
+        this.$el.html("");
+        this.collection.each(function(picture) {
+            // console.log(picture);
+            var child = new PictureView({
+                model: picture
+            });
+            this.listenTo(child, "pictureSelected", this.onPictureSelected);
+            this.$el.append(child.el);
+        }.bind(this));
+
+
+        // this.$el.html(this.template());
+    },
+    onPictureSelected: function(pictureModel) {
+        console.log("PICTURE SELECTED ");
+        this.$("img").removeClass("selected");
+        var $input = this.$el.closest('form').find('input[name=picture]');
+        $input.val(pictureModel.get('picture'));
+        console.log('===>', pictureModel.get('picture'));
+    }
+});
+
+var PictureView = Backbone.View.extend({
+    events : {
+        "click img" : "select"
+    },
+    initialize: function() {
+        this.template = Handlebars.compile($("#musician-faces-template").html());
+        this.render();
+    },
+    select: function(e) {
+        this.trigger("pictureSelected", this.model);
+        $(e.currentTarget).addClass("selected");
+    },
+    render: function() {
+        var html = this.template(this.model.toJSON());
+        this.$el.html(html);
+    }
+});
+
+var MusicianCollection = Backbone.Collection.extend({
+    url: "/musician",
+    initialize: function() { }
+});
+
+var PicturesCollection = Backbone.Collection.extend({
+    url: "/picture",
+    initialize: function() {
+        console.log('PICTURESCOLLECTION INIT');
     }
 });
 
@@ -176,14 +294,14 @@ var Router = Backbone.Router.extend({
 
 
 
-
-
 $(document).ready(function() {
 
     // écoute de la navigation
     $(".button-group .button").on("click", function(e) {
         e.preventDefault();
-        Backbone.history.navigate($(this).attr("href"), {trigger: true});
+        Backbone.history.navigate($(this).attr("href"), {
+            trigger: true
+        });
     });
 
     var router = new Router();
