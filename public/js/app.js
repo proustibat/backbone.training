@@ -93,6 +93,44 @@ var NotificationView = Backbone.View.extend({
 });
 
 
+var LayoutView = Backbone.View.extend({
+
+    initialize: function() {
+        console.log('initialize LayoutView');
+        this.template = Handlebars.compile($("#layout-template").html());
+        this.render();
+    },
+
+    render: function(pageType) {
+        console.log('Render LayoutView');
+
+        this.$el.html(this.template());
+
+        var musicianCollection = new MusicianCollection();
+
+        var notificationView = new NotificationView({
+            el: ".js-notification",
+            collection: musicianCollection
+        });
+
+        switch(pageType) {
+            case 'home':
+            console.log('HHHHHHHHHHHHHHHHHHHHHHHHHHHH');
+                var musiciansViews = new MusiciansViews({
+                    el: ".js-musicians-list",
+                    collection: musicianCollection
+                });
+                break;
+            case 'add':
+                console.log('ADDDDDDDDDDDDDDDDDDDDDDDD');
+                break;
+            case 'login':
+                break;
+            }
+        }
+});
+
+
 var MusicianCollection = Backbone.Collection.extend({
     url: "/musician",
     initialize: function() {
@@ -103,23 +141,52 @@ var MusicianCollection = Backbone.Collection.extend({
     }
 });
 
+var Router = Backbone.Router.extend({
+
+    routes: {
+        "login": "login",
+        "add": "add",
+        "*path": "home"
+    },
+
+    initialize: function() {
+        console.log('ROUTER INIT');
+
+        this.layoutView = new LayoutView({
+            el: ".js-layout-element"
+        });
+
+    },
+
+    home: function() {
+        console.log('ROUTE HOME');
+        this.layoutView.render('home');
+    },
+
+    login: function() {
+        console.log('ROUTE LOGIN');
+        this.layoutView.render('login');
+    },
+
+    add: function() {
+        console.log("ROUTE ADD");
+        this.layoutView.render('add');
+    }
+});
+
+
+
 
 
 $(document).ready(function() {
 
-    var musicianCollection = new MusicianCollection();
-
-    var musiciansViews = new MusiciansViews({
-        el: ".js-musicians-list",
-        collection: musicianCollection
+    // écoute de la navigation
+    $(".button-group .button").on("click", function(e) {
+        e.preventDefault();
+        Backbone.history.navigate($(this).attr("href"), {trigger: true});
     });
 
-    var notificationView = new NotificationView({
-        el: ".js-notification",
-        collection: musicianCollection
-    });
+    var router = new Router();
+    Backbone.history.start();
 
-    // musicianCollection.fetch().done(function(){
-    //     console.log('List found ');
-    // });
 });
