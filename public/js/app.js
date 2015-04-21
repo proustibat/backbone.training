@@ -29,7 +29,6 @@ var MusicianView = Backbone.View.extend({
     },
 
     initialize: function() {
-        console.log('MusicianView.initialize');
         this.template = Handlebars.compile($("#musicians-list-template").html());
         this.render();
     },
@@ -40,19 +39,59 @@ var MusicianView = Backbone.View.extend({
 
     onClickHandler: function(e) {
         this.model.destroy({
+                wait: true, // envoie le succès qu'après confirmation par le serveur
                 success: function(model, response) {
-                console.log("DESTROYED");
-                console.log('this : ', this);
+                console.log("mode destroyed");
             }.bind(this)
         });
     },
     render: function() {
-        console.log('MusicianView.render');
-        console.log('this.model : ', this.model.toJSON());
         var html = this.template(this.model.toJSON());
         this.$el.html(html);
     }
 });
+
+
+var NotificationView = Backbone.View.extend({
+
+    events: {
+        "click .close": "onClose"
+    },
+
+    initialize: function() {
+        this.template = Handlebars.compile($("#notification-template").html());
+        this.listenTo(this.collection, 'destroy', this.render.bind(this, 'success'));
+        this.listenTo(this.collection, 'error', this.render.bind(this, 'failure'));
+        // this.render();
+    },
+
+    onClose: function() {
+        console.log('onclose');
+        this.$el.hide();
+    },
+
+    render: function(state) {
+        var message = "It's ok",
+            clazz = 'secondary';
+
+        if(state==="failure") {
+            message = "Problem ";
+            clazz = "alert ";
+        }
+
+        var $message = $(this.template(message)).addClass(clazz);
+        this.$el.hide().html($message).fadeIn();
+        // setTimeout(function() {
+        //     this.$el.fadeOut();
+        // }.bind(this), 2000);
+        this.hide();
+    },
+    hide: _.debounce(function() {
+        this.$el.fadeOut();
+    }, 5000)
+
+});
+
 
 var MusicianCollection = Backbone.Collection.extend({
     url: "/musician",
@@ -72,6 +111,11 @@ $(document).ready(function() {
 
     var musiciansViews = new MusiciansViews({
         el: ".js-musicians-list",
+        collection: musicianCollection
+    });
+
+    var notificationView = new NotificationView({
+        el: ".js-notification",
         collection: musicianCollection
     });
 
