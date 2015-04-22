@@ -6,7 +6,9 @@
     "express-session": "1.8.x",
     "body-parser": "1.5.x",
     "lodash": "2.4.x",
-    "socket.io": "1.2.x"
+    "socket.io": "1.2.x",
+    "passport": "0.2.x",
+    "passport-google-oauth2": "0.1.x"
   },
   "engine": "node 0.10.x"
 }

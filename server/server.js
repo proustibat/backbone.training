@@ -4,6 +4,7 @@ var express = require('express'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
 	authentication = require('./authentication'),
+	passport = require('passport'),
 	port = process.env.PORT || 3000;
 
 var app = express(),
@@ -16,6 +17,9 @@ app
 	.use(express.static(__dirname + '/../public'))
 	.use(bodyParser.json({limit: '70mb'}))
 	.use(session({secret: '1337', saveUninitialized: true, resave: true}))
+	.use(passport.initialize())
+	.use(passport.session())
+	.use(require('./oauth'))
 	.use(authentication)
 	.use(require('./user'))
 	.use(require('./musician'))

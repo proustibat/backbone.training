@@ -51,6 +51,10 @@
 	background-color: #1BBC9B;
 }
 
+.button.google, .button.google:hover, .button.google:focus {
+	background-color: #d14836;
+}
+
 img.face {
 	display: block;
 	margin: auto;
