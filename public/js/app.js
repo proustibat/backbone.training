@@ -130,7 +130,8 @@ var LayoutView = Backbone.View.extend({
                 break;
             case 'login':
                 var loginView = new LoginView({
-                    collection: musicianCollection
+                    collection: musicianCollection,
+                    model: user
                 });
                 this.$(".js-main-page").html(loginView.el);
                 break;
@@ -184,16 +185,65 @@ var MusiciansCreationView = Backbone.View.extend({
     }
 });
 
-var LoginView = Backbone.View.extend({
-
+var User = Backbone.Model.extend({
     initialize: function() {
-        this.template = Handlebars.compile($("#login-template").html());
-        this.render();
+        this.on('sync', this.notNewAnymore);
     },
-    render: function() {
-        this.$el.html(this.template());
+    notNewAnymore: function() {
+        this.set('id', 0);
+    },
+    url: function() {
+        var url = '/user';
+        if (this.has('sign')) {
+            this.unset('sign');
+            url += '/signin';
+        }
+        return url;
     }
 });
+var user = new User();
+
+var LoginView = Backbone.View.extend({
+    templateLogin: null,
+    templateLogged: null,
+    events: {
+        'submit': 'submit',
+        'click .js-logout': 'logout'
+    },
+    initialize: function() {
+        this.templateLogin = Handlebars.compile($("#login-template").html());
+        this.templateLogged = Handlebars.compile($("#logged-template").html());
+        this.model.fetch()
+            .done(this.renderLogged.bind(this))
+            .fail(this.renderLogin.bind(this));
+    },
+    renderLogged: function() {
+        this.$el.html(this.templateLogged(this.model.toJSON()));
+    },
+    renderLogin: function() {
+        this.$el.html(this.templateLogin());
+    },
+    submit: function(e) {
+        e.preventDefault();
+        var name = this.$('input[name=name]').val();
+        var password = this.$('input[name=password]').val();
+        this.model
+            .save({
+                name: name,
+                password: password,
+                sign: true
+            })
+            .done(this.renderLogged.bind(this));
+    },
+    logout: function(e) {
+        e.preventDefault();
+        this.model.set({ sign: true }).destroy().done(
+            this.renderLogin.bind(this)
+        );
+    }
+});
+
+
 
 var PicturesView = Backbone.View.extend({
     initialize: function() {
@@ -230,8 +280,8 @@ var PicturesView = Backbone.View.extend({
 });
 
 var PictureView = Backbone.View.extend({
-    events : {
-        "click img" : "select"
+    events: {
+        "click img": "select"
     },
     initialize: function() {
         this.template = Handlebars.compile($("#musician-faces-template").html());
@@ -249,7 +299,7 @@ var PictureView = Backbone.View.extend({
 
 var MusicianCollection = Backbone.Collection.extend({
     url: "/musician",
-    initialize: function() { }
+    initialize: function() {}
 });
 
 var PicturesCollection = Backbone.Collection.extend({
@@ -258,6 +308,7 @@ var PicturesCollection = Backbone.Collection.extend({
         console.log('PICTURESCOLLECTION INIT');
     }
 });
+
 
 var Router = Backbone.Router.extend({
 
@@ -291,8 +342,6 @@ var Router = Backbone.Router.extend({
         this.layoutView.render('add');
     }
 });
-
-
 
 $(document).ready(function() {
 
