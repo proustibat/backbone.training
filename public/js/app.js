@@ -155,9 +155,17 @@ var MusiciansCreationView = Backbone.View.extend({
         });
         // attache le contenu dans le noeud parce que la vue parente n'est pas encore rendue
         this.$(".js-musician-faces").html(this.pictureView.el);
+
+        this.listenTo(this.collection, 'invalid', function(model, errors) {
+            console.log('LISSSSSSTEN');
+            if (_.contains(errors, 'name')) {
+                this.$('input[name=name]').closest('.row').addClass('invalid');
+            }
+        });
     },
     submit: function(e) {
         e.preventDefault();
+        this.$('input[name=name]').closest('.row').removeClass('invalid');
         console.log('SUBMIT');
         var $name = this.$("input[name=name]");
         var $bio = this.$("textarea[name=bio]");
@@ -237,7 +245,9 @@ var LoginView = Backbone.View.extend({
     },
     logout: function(e) {
         e.preventDefault();
-        this.model.set({ sign: true }).destroy().done(
+        this.model.set({
+            sign: true
+        }).destroy().done(
             this.renderLogin.bind(this)
         );
     }
@@ -299,7 +309,25 @@ var PictureView = Backbone.View.extend({
 
 var MusicianCollection = Backbone.Collection.extend({
     url: "/musician",
-    initialize: function() {}
+    model: Backbone.Model.extend({
+        urlRoot: '/musician',
+        initialize: function() {
+            console.log('modelcollection initialize');
+            // https://github.com/jashkenas/backbone/issues/3328
+            this.on('invalid', function(model, errors) {
+                console.log("INVALIDE : ", this.collection);
+                if (this.collection) {
+                    console.log('"alllo');
+                    this.collection.trigger('invalid', model, errors);
+                }
+            });
+        },
+        validate: function(attrs, options) {
+            console.log('modelcollection validate');
+            console.log((attrs.name.length < 3) ? ['name'] : undefined);
+            return (attrs.name.length < 3) ? ['name'] : undefined;
+        }
+    }),
 });
 
 var PicturesCollection = Backbone.Collection.extend({
