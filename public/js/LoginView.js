@@ -14,6 +14,8 @@ define(function(require) {
 				.fetch()
 				.done(this.renderLogged.bind(this))
 				.fail(this.renderLogin.bind(this));
+
+			this.listenTo(this.model, 'logged', this.renderLogged);
 		},
 		renderLogged: function() {
 			this.$el.html(this.templateLogged(this.model.toJSON()));
