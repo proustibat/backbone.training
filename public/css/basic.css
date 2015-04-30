@@ -142,7 +142,7 @@ footer p {
 }
 
 textarea {
-	resize: none; 
+	resize: none;
 }
 
 .prefix.textarea, textarea {
@@ -193,3 +193,11 @@ p {
 	border-color: #F04124;
 	transition: none;
 }
+.panel.editing h5, .panel.editing h6, .panel.editing h6 + input {
+	display: none;
+}
+
+.panel.editing form.hide {
+	display: block !important;
+	visibility: visible;
+ }

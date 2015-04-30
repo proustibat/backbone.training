@@ -2,10 +2,10 @@
   <div class="large-12 columns">
     <dl class="sub-nav">
       <dt data-title="Filter musicians by band">Filter:</dt>
-      <dd {{#equal . 'All'}}class="active"{{/equal}}><a>All</a></dd>
-      <dd {{#equal . 'Floyd'}}class="active"{{/equal}}><a>Floyd</a></dd>
-      <dd {{#equal . 'Beatles'}}class="active"{{/equal}}><a>Beatles</a></dd>
-      <dd {{#equal . 'Zeppelin'}}class="active"{{/equal}}><a>Zeppelin</a></dd>
+      <dd {{#equal criteria 'All'}}class="active"{{/equal}}><a>All</a></dd>
+      <dd {{#equal criteria 'Floyd'}}class="active"{{/equal}}><a>Floyd</a></dd>
+      <dd {{#equal criteria 'Beatles'}}class="active"{{/equal}}><a>Beatles</a></dd>
+      <dd {{#equal criteria 'Zeppelin'}}class="active"{{/equal}}><a>Zeppelin</a></dd>
     </dl>
   </div>
 </div>

@@ -1,7 +1,9 @@
+
 define(function(require) {
-	var Handlebars = require('handlebars'); 
-	var Backbone = require('backbone'); 
-	var Marionette = require('marionette'); 
+	var Handlebars = require('handlebars');
+	var Backbone = require('backbone');
+	var Marionette = require('marionette');
+    var Radio = require('radio');
 
 	Handlebars.registerHelper('equal', function(lvalue, rvalue, options) {
 		return lvalue != rvalue ? options.inverse(this) : options.fn(this);
@@ -14,7 +16,7 @@ define(function(require) {
     		if(model.handleErrors)
     			_error(xhr, status, error);
     		else
-           		Backbone.trigger('notification:failure', xhr.statusText ? xhr.statusText : 'Something went wrong');
+            Backbone.trigger('notification:failure', xhr.statusText ? xhr.statusText : 'Something went wrong');
         }
     	return _sync(method, model, options);
     };

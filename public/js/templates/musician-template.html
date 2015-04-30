@@ -1,8 +1,26 @@
 <div class="large-4 small-6 columns {{#unless picture}}nodelete{{/unless}}">
-  <img class="face" src="{{picture}}">
-    
-  <div class="panel">
+    <div class="js-face">
+    <img class="face" src="{{picture}}">
+    </div>
+
+    <div class="panel js-panel">
+
     <h5>{{name}}</h5>
     <h6 class="subheader">{{bio}}</h6>
-  </div>
+    <input type="submit" class="button js-edit" value="Edit"></input>
+
+   <form class="hide">
+      <div class="row">
+        <div class="large-12 columns">
+          <input type="text" name="name" value="{{name}}" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="large-12 columns">
+          <textarea name="bio">{{bio}}</textarea>
+        </div>
+      </div>
+      <input type="submit" class="button js-update" value="Update"></input>
+    </form>
+    </div>
 </div>

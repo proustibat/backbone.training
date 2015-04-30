@@ -1,11 +1,12 @@
 define(function(require) {
-	var Backbone = require('backbone');
-	var Handlebars = require('handlebars'); 
+	// var Backbone = require('backbone');
+	var Marionette = require('marionette');
+	var Handlebars = require('handlebars');
 
-	return Backbone.View.extend({
-		template: Handlebars.compile(require('text!../templates/musician-faces-template.html')),
+	return Marionette.ItemView.extend({
+		template: require('text!../templates/musician-faces-template.html'),
 		initialize: function() {
-			this.$el.html(this.template(this.model.toJSON()));
+			// this.$el.html(this.template(this.model.toJSON()));
 		},
 		events: {
 			'click img': 'pick'

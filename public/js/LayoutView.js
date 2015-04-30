@@ -1,7 +1,7 @@
 define(function(require) {
-	var Marionette = require('marionette'); 
-	var Handlebars = require('handlebars'); 
-	
+	var Marionette = require('marionette');
+	var Handlebars = require('handlebars');
+
 	var user = require('./User');
 	var NotificationsView = require('./NotificationsView');
 	var LoginView = require('./LoginView');
@@ -22,9 +22,9 @@ define(function(require) {
 		},
 		show: function(type, query) {
 			var musicians = new Musicians();
-			
+
 			switch(type) {
-			case 'home': 
+			case 'home':
 				this.main.show(new MusiciansView({collection: musicians, criteria: query.filter}));
 			break;
 			case 'creation':

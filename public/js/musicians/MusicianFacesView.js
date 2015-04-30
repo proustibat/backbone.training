@@ -1,24 +1,25 @@
 define(function(require) {
 	var Backbone = require('backbone');
-	
-	var MusicianFaceView = require('./MusicianFaceView');
-	var Pictures = Backbone.Collection.extend({url: '/picture'});
+	var Marionette = require('marionette');
 
-	return Backbone.View.extend({
+	var MusicianFaceView = require('./MusicianFaceView');
+	var Pictures = Backbone.Collection.extend({
+		url: '/picture'
+	});
+
+	return Marionette.CollectionView.extend({
+		childView: MusicianFaceView,
+		childEvents: {
+			selection: function(view, model) {
+				this.selection(model);
+			}
+		},
 		initialize: function() {
 			this.collection = new Pictures();
-			this.collection.fetch().done(this.render.bind(this));
-		},
-		render: function() {
-			var $row = $('<div class="row">');
-			this.$el.html($row);
-			this.collection.each(function(model) {
-				var child = new MusicianFaceView({model: model});
-				this.listenTo(child, 'selection', this.selection);
-				$row.append(child.el);
-			}.bind(this));
+			this.collection.fetch().done();
 		},
 		selection: function(model) {
+			console.log('allo');
 			this.$('img').removeClass('selected');
 			var $input = this.$el.closest('form').find('input[name=picture]');
 			$input.val(model.get('picture'));
